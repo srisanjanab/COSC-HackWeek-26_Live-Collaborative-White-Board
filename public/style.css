@@ -1,0 +1,318 @@
+/* ============================================================
+   Live Collaborative Whiteboard — Styles
+   Concept: an actual dry-erase board on a wall, with a
+   charcoal metal frame/tray of markers along the bottom.
+   ============================================================ */
+
+:root {
+  --board:        #fafaf7;
+  --board-grid:   rgba(20, 20, 18, 0.045);
+
+  --frame:        #2b2e33;
+  --frame-2:      #34383e;
+  --frame-line:   rgba(255, 255, 255, 0.08);
+
+  --paper-text:   #1c1c1a;
+  --chrome-text:  #e8e9ea;
+  --chrome-dim:   #9aa0a6;
+
+  --brand:        #ff6b4a;
+
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body:    "Inter", sans-serif;
+  --font-mono:    "IBM Plex Mono", monospace;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--board);
+  font-family: var(--font-body);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+#board {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  background-image:
+    linear-gradient(var(--board-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--board-grid) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* ---------------------------------------------------------
+   Top bar
+   --------------------------------------------------------- */
+
+.topbar {
+  position: fixed;
+  top: 18px;
+  left: 18px;
+  right: 18px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.room-chip {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff8d8;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1), 0 1px 0 rgba(255, 255, 255, 0.6) inset;
+  border-radius: 4px;
+  padding: 10px 14px;
+  transform: rotate(-1.2deg);
+  font-family: var(--font-mono);
+}
+
+.room-chip__label {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8a7a3f;
+}
+
+.room-chip__code {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--paper-text);
+  letter-spacing: 0.03em;
+}
+
+.room-chip__copy {
+  font-family: var(--font-body);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--frame);
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 20px;
+  padding: 6px 10px;
+  transition: background 0.15s ease;
+}
+
+.room-chip__copy:hover { background: rgba(0, 0, 0, 0.12); }
+
+.presence {
+  pointer-events: auto;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  background: var(--frame);
+  color: var(--chrome-text);
+  border-radius: 20px;
+  padding: 9px 16px;
+  font-size: 12.5px;
+}
+
+.presence__count {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  color: var(--brand);
+  font-size: 14px;
+}
+
+.presence__label { color: var(--chrome-dim); }
+
+.toast {
+  position: fixed;
+  top: 70px;
+  left: 18px;
+  z-index: 25;
+  background: var(--frame);
+  color: var(--chrome-text);
+  font-size: 12.5px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  animation: fadeInOut 2.2s ease forwards;
+}
+
+@keyframes fadeInOut {
+  0%   { opacity: 0; transform: translateY(-4px); }
+  12%  { opacity: 1; transform: translateY(0); }
+  80%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ---------------------------------------------------------
+   Live cursors
+   --------------------------------------------------------- */
+
+#cursor-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 15;
+}
+
+.cursor {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transform: translate(-2px, -2px);
+  transition: left 0.06s linear, top 0.06s linear;
+}
+
+.cursor__dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(45deg);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+}
+
+.cursor__label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: #fff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------
+   Bottom marker tray — the signature element
+   --------------------------------------------------------- */
+
+.tray {
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--frame);
+  border-radius: 18px;
+  padding: 10px 16px;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.28), 0 1px 0 var(--frame-line) inset;
+}
+
+.tray__markers {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.marker {
+  position: relative;
+  width: 26px;
+  height: 40px;
+  border-radius: 6px 6px 3px 3px;
+  background: linear-gradient(180deg, var(--m-color) 0%, var(--m-color) 62%, #f4f1e8 62%, #f4f1e8 100%);
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  padding: 0;
+}
+
+.marker::after {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 6px;
+  border-radius: 3px 3px 0 0;
+  background: var(--m-color);
+  filter: brightness(0.85);
+}
+
+.marker:hover { transform: translateY(-4px); }
+
+.marker[aria-pressed="true"] {
+  transform: translateY(-9px);
+  box-shadow: 0 8px 14px rgba(0, 0, 0, 0.35);
+}
+
+.tray__divider {
+  width: 1px;
+  align-self: stretch;
+  background: var(--frame-line);
+  margin: 4px 0;
+}
+
+.tray__size {
+  display: flex;
+  align-items: center;
+}
+
+#size-slider {
+  width: 90px;
+  accent-color: var(--brand);
+}
+
+.tray__tool {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  color: var(--chrome-dim);
+  padding: 6px 10px;
+  border-radius: 10px;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.tray__tool:hover { background: var(--frame-2); color: var(--chrome-text); }
+
+.tray__tool[aria-pressed="true"] {
+  color: var(--brand);
+  background: var(--frame-2);
+}
+
+.tray__tool-icon { font-size: 15px; line-height: 1; }
+.tray__tool-label { font-size: 10px; letter-spacing: 0.02em; }
+
+.tray__tool--danger:hover { color: #ff5a4d; }
+
+/* ---------------------------------------------------------
+   Connection banner
+   --------------------------------------------------------- */
+
+.conn-banner {
+  position: fixed;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+  background: #3a2420;
+  color: #ffd7cc;
+  font-size: 12.5px;
+  padding: 8px 16px;
+  border-radius: 20px;
+}
+
+/* ---------------------------------------------------------
+   Responsive
+   --------------------------------------------------------- */
+
+@media (max-width: 640px) {
+  .topbar { flex-direction: column; gap: 10px; }
+  .presence { align-self: flex-end; }
+  .tray { gap: 8px; padding: 8px 10px; left: 50%; max-width: 94vw; }
+  .marker { width: 20px; height: 32px; }
+  #size-slider { width: 60px; }
+  .tray__tool-label { display: none; }
+}

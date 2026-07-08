@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Shared Board — Live Collaborative Whiteboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- The board itself -->
+<canvas id="board"></canvas>
+
+<!-- Live cursor labels float above the canvas -->
+<div id="cursor-layer"></div>
+
+<!-- Top bar: room chip + presence -->
+<div class="topbar">
+  <div class="room-chip">
+    <span class="room-chip__label">Room</span>
+    <span id="room-code" class="room-chip__code">—</span>
+    <button id="copy-link" class="room-chip__copy" title="Copy invite link">Copy invite link</button>
+  </div>
+
+  <div class="presence" id="presence">
+    <span class="presence__count" id="presence-count">1</span>
+    <span class="presence__label">on this board</span>
+  </div>
+</div>
+
+<div id="copied-toast" class="toast" hidden>Link copied — send it to a friend</div>
+
+<!-- Bottom marker tray: the signature element -->
+<div class="tray">
+  <div class="tray__markers" id="marker-set" role="group" aria-label="Marker colors"></div>
+
+  <div class="tray__divider"></div>
+
+  <div class="tray__size">
+    <input type="range" id="size-slider" min="2" max="26" value="5" aria-label="Marker thickness">
+  </div>
+
+  <div class="tray__divider"></div>
+
+  <button id="eraser-btn" class="tray__tool" title="Eraser" aria-pressed="false">
+    <span class="tray__tool-icon">◻</span>
+    <span class="tray__tool-label">Eraser</span>
+  </button>
+
+  <button id="clear-btn" class="tray__tool tray__tool--danger" title="Clear the whole board">
+    <span class="tray__tool-icon">✕</span>
+    <span class="tray__tool-label">Clear board</span>
+  </button>
+</div>
+
+<div id="connection-banner" class="conn-banner" hidden>Reconnecting to the board…</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
